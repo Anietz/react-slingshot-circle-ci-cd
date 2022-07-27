@@ -39,8 +39,8 @@ jobs:
     steps:
       - checkout
       - run: 
-        - name:  Static code analysis
-        - command: npm audit
+          name:  Static code analysis
+          command: npm audit
 workflows:
   react_workflow:
     jobs:
