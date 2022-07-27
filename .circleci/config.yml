@@ -14,10 +14,11 @@ jobs:
     << : *dockerImage
     steps:
       - checkout
-      - run: npm install
+      - run: npm ci
       - save_cache:
-          key: npm_packages
-          paths: ~/node_modules
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+          paths:
+              - node_modules
       - run: npm run lint
   test:
     << : *dockerImage
@@ -25,7 +26,11 @@ jobs:
       - checkout  
       # - restore_cache:
       #       key: npm_packages
-      - run: npm install
+      - restore_cache:
+        key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+      - run:
+          name: Install node dependencies
+          command: "[ ! -d node_modules ] && npm ci --loglevel warn --yes || echo package.json and package-lock.json unchanged. Using cache."
       - run: npm run test
   analyze:
     << : *dockerImage
@@ -41,4 +46,4 @@ workflows:
             - build
       - analyze: 
           requires:
-            - build
+            - test
