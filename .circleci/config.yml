@@ -13,19 +13,21 @@ jobs:
   build:
     << : *dockerImage
     steps:
-      - checkout:
-      - run: npm run install
+      - checkout
+      - run: npm install
       - save_cache:
           key: npm_packages
-          paths: node_modules
-      - run: npm run build
+          paths: /src/node_modules
+      - run: npm run lint
   test:
-     - checkout:  
+    << : *dockerImage
+     - checkout  
      - restore_cache:
           key: npm_packages
      - run: npm run test
   analyze:
-    - checkout:
+    << : *dockerImage
+    - checkout
     - run: npm audit
 workflows:
   react_workflow:
