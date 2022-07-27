@@ -27,7 +27,7 @@ jobs:
       # - restore_cache:
       #       key: npm_packages
       - restore_cache:
-        key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: "[ ! -d node_modules ] && npm ci --loglevel warn --yes || echo package.json and package-lock.json unchanged. Using cache."
