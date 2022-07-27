@@ -23,8 +23,9 @@ jobs:
     << : *dockerImage
     steps:
       - checkout  
-      - restore_cache:
-            key: npm_packages
+      # - restore_cache:
+      #       key: npm_packages
+      - run: npm install
       - run: npm run test
   analyze:
     << : *dockerImage
