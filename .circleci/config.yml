@@ -19,24 +19,28 @@ jobs:
           key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
               - node_modules
-      - run: npm run lint
+      - run:
+          name: Running lint
+          command: npm run lint
   test:
     << : *dockerImage
     steps:
       - checkout  
-      # - restore_cache:
-      #       key: npm_packages
       - restore_cache:
-          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}  #### Restores from the cache
       - run:
-          name: Install node dependencies
+          name: Install node dependencies ### checks if node_modules exist in cache to speed up process
           command: "[ ! -d node_modules ] && npm ci --loglevel warn --yes || echo package.json and package-lock.json unchanged. Using cache."
-      - run: npm run test
+      - run: 
+          name: Running test
+          command: npm run test
   analyze:
     << : *dockerImage
     steps:
       - checkout
-      - run: npm audit
+      - run: 
+        - name:  Static code analysis
+        - command: npm audit
 workflows:
   react_workflow:
     jobs:
