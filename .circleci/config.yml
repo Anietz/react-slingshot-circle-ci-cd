@@ -21,14 +21,16 @@ jobs:
       - run: npm run lint
   test:
     << : *dockerImage
-     - checkout  
-     - restore_cache:
-          key: npm_packages
-     - run: npm run test
+    steps:
+      - checkout  
+      - restore_cache:
+            key: npm_packages
+      - run: npm run test
   analyze:
     << : *dockerImage
-    - checkout
-    - run: npm audit
+    steps:
+      - checkout
+      - run: npm audit
 workflows:
   react_workflow:
     jobs:
